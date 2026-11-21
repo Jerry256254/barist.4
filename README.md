@@ -1,3 +1,6 @@
+> **Successor: [Barist.5](https://huggingface.co/KucLab/Barist.5)** (GitHub: [Jerry256254/barist.5](https://github.com/Jerry256254/barist.5)) — eighth adversarial review: category hard block disabled behind `category_block:false` until new cat_recall gates pass; 1P self-harm / 3P kill / hidden poison bypass classes closed; CSAM EN patterns; roleplay -> needs_review; regex gate now runs the full predict() pipeline (481 benign, 0 FP). Ollama data round 3 (+2,101), 3 training rounds (checkpoints_b5c). This repo is kept as-is.
+
+
 # Barist.4
 
 > **Naming note:** this is the successor of the Censer line (Censer.1–.9). Too many
