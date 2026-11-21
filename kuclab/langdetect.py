@@ -98,11 +98,11 @@ def _rx(pat: str):
 
 
 _MC_CSAM = _rx(r"\b(csam|cp links?|child porn\w*|detsky material|detske intimni|nezletil\w*.{0,20}(fotk|vide|foto|obraz|video)|(dit\w*|det\w*) bez (odeceni|obleceni)|vide(a|o) s (dit\w*|det\w*) (bez odeceni|nah|intimnich|sexualnich)|(natoc|posli|poslat|ukaz|send).{0,30}(dit\w*|det\w*|kids|children) (v plavkach|in plavkach|nah[a|é]?|nude)|(dit\w*|det\w*) v plavkach.{0,20}(bez odeceni|nah|intim|sex)|intimni fotky nezletil|poslat intimni fotky|material de menores|fotos intimas de menores|video de ninos sin ropa|send me nudes of kids|photos of kids without clothes|kinderpornografie|porn\w* infantile|pornografia infantil|detsk\w* porn\w*|nah\w* fotk\w* (dit\w*|det\w*)|nah\w* fotky nezletil\w*|fotos de menores|underage nudes|cp download|pedofil\w*|telegram (skupina|group|kanal|channel|link) (o|pro|na)? ?(csam|cp|porn|detsk\w*|nah\w*|fotos|menores|pedofil))\b")
-_MC_SELFHARM_1P = _rx(r"(chci se zabit|zabiju se|chci (se )?umrit|chci zem\w*|nechci (uz )?zit|chci si ubliz\w*|sebepo(s|š)kozuji|rezuju se|rezat se|podrezat( si)? zily|prasky na zabit|predavkovat se|rezu se(?! smichy)|kill myself|i (want to|wanna) die|end it all|i cant go on anymore|how to (kill myself|die)|ich will mich umbringen|mich umbringen|ich will sterben|ich will nicht mehr leben|quiero morir|quiero morirme|quiero suicidarme|quiero desaparecer|voglio (uccidermi|morire|sparire)|me suicider|je veux mourir|plus vivre|ne veux plus vivre|(vzit si zivot|vzit zivot)(?! do vlastnich rukou)|prestat zit(?!\s+(v|na|ve|do)\s)|nechci dal zit|jak (se )?(nejrychleji )?zemrit doma|chci (se )?zemrit|otravit se( prasky| tabletkami)?|(se )?porezat( se)?|jak se porezat|(se )?podrezat( se)?( zily)?|otravit (se )?prasky|jak se otravit|prasky (ktere|co) mi pomu(z|ž)ou zemrit|predavkov.{0,40}(mi pomu|chci|zemrit|jak se)|(chci|jak|pomoz|porad).{0,40}predavkov|uz to nevydrzim.{0,30}(pomoz|skoncit|koncit|zemrit)|pomuz(te)? mi skoncit|chci zmizet navzdy)")
-_MC_SELFHARM_INSTR = _rx(r"(jak se (zabit|obesit|zranit|ublit)|jak (si )?sebepo|suicid\w*|sebevraz\w*|sebepo(s|š)kozeni|how to (kill|die)\b|end my life|skoncit\w* zivot)")
+_MC_SELFHARM_1P = _rx(r"(chci se zabit|zabiju se|chci (se )?umrit|chci zem\w*|nechci (uz )?zit|chci si ubliz\w*|sebepo(s|š)kozuji|rezuju se|rezat se|podrezat( si)? zily|prasky na zabit|predavkovat se|rezu se(?! smichy)|kill myself|i (want to|wanna) die|end it all|i cant go on anymore|how to (kill myself|die)|ich will mich umbringen|mich umbringen|ich will sterben|ich will nicht mehr leben|quiero morir|quiero morirme|quiero suicidarme|quiero desaparecer|voglio (uccidermi|morire|sparire)|me suicider|je veux mourir|plus vivre|ne veux plus vivre|(vzit si zivot|vzit zivot)(?! do vlastnich rukou)|prestat zit(?!\s+(v|na|ve|do)\s)|nechci dal zit|jak (se )?(nejrychleji )?zemrit doma|chci (se )?zemrit|otravit se( prasky| tabletkami)?|(se )?porezat( se)?|jak se porezat|(se )?podrezat( se)?( zily)?|prasky (ktere|co) mi pomu(z|ž)ou zemrit|predavkov.{0,25}(mi pomu|chci|zemrit)|(chci|pomoz|porad).{0,25}predavkov|jak se.{0,25}predavkov|uz to nevydrzim.{0,30}(pomoz|skoncit|koncit|zemrit)|pomuz(te)? mi skoncit|chci zmizet navzdy)")
+_MC_SELFHARM_INSTR = _rx(r"(jak se (?!nezranit)[a-z ]{0,25}(zabit|obesit|zranit|ublit|zemrit)|jak se (zabit|obesit|zranit|ublit)|jak (si )?sebepo|suicid\w*|sebevraz\w*|sebepo(s|š)kozeni|how to (kill|die)\b|end my life|skoncit\w* zivot)")
 _MC_INSTR_MARK = _rx(r"\b(jak|how|navod na|way|method|zpusob|prosim|please|tell me|dime|sag mir|dites|instructions?|step by step)\b")
-_MC_SUPPORT_CONTEXT = _rx(r"(pomoct|pomoc|kamarad|linka|bezpeci|help|support|suicide prevention|prevence|predejit|predchazet|zabranit|literatura|literature|hamlet|kniha|novela|film|divadlo|hra|game|story|sims|ve hre|pocitacova hra|vyhled|clanek|prispevek)")
-_MC_NEWS_CONTEXT = _rx(r"(vysetruje|policie|news|zprav|clanek|report|obet|vrah|doslo k|explodovala|explosion|utok|atentat|vystava|muzeum|historie|svetova valka|exponat|dokument)")
+_MC_SUPPORT_CONTEXT = _rx(r"\b(pomoct|pomoc|kamarad|linka|bezpeci|help|support|suicide prevention|prevence|predejit|predchazet|zabranit|literatura|literature|hamlet|kniha|novela|film|divadlo|hra|game|story|sims|ve hre|pocitacova hra|vyhled|clanek|prispevek)\b")
+_MC_NEWS_CONTEXT = _rx(r"\b(vysetruje|policie|news|zprav|clanek|report|obet|vrah|doslo k|explodovala|explosion|utok|atentat|vystava|muzeum|historie|svetova valka|exponat|dokument)\b")
 _MC_THREAT = _rx(r"(zabiju (te|vas)|kill you|i\'ll kill you|ill kill you|je vais te tuer|te matare|voy a matarte|te voy a matar|quiero hacerte dano|voglio ucciderti|ich bringe dich um|ich tote dich|jemanden umbringen|bringe ich jemanden um)")
 _MC_HATE_GROUP = _rx(r"(vystříl\w*|vystřel\w*|postříl\w*|postřel\w*|zabít všechny|zabit vsechny|vyhlad\w*|vyhub\w*|pověsit|povez\w*|zastřel\w*|umuč\w*|utýrat).{0,40}(cigán|cigan|rom\w*|žid\w*|zid\w*|uprchlík\w*|uprchlik\w*|muslim\w*|imigrant\w*|černoch\w*|nigg\w*|muslim\w* všichni|všechny cigány)|(cigán\w*|cigan\w*|romov\w*|židov\w*|zidov\w*|uprchlík\w*|muslim\w*|imigrant\w*|černoš\w*).{0,40}(vystříl\w*|vystřel\w*|postříl\w*|postřel\w*|zab\w*|zastřel\w*|pověs\w*|vyhn\w*|vyhub\w*|vyhlad\w*)|kill all (jews|muslims|blacks|gypsies|immigrants)|exterminate (the )?(jews|muslims|roma)|holocaust deni\w*|white power|heil hitler")
 _MC_WEAPONS_DIY = _rx(r"(jak (vyrobit|postavit) (bombu|granat|trhavin|vybusninu)|navod na (vyrobu )?(bombu|granat|trhavin|vybusniny|exploziv)|vyroba (bomby|granatu|trhaviny|vybusniny)|(bombu|granat) doma|wie baue ich eine bombe|bombauleitung|anleitung sprengstoff|sprengstoff herstell|bombe aus haushaltsmitteln|fabricar una bomba|bomba casera|bomba homemade|hacer una bomba|how to (make|build) a (bomb|grenade)|bomb-?making|homemade bomb|grenade (instructions|tutorial)|fabriquer une bombe|comment faire une bombe|как сделать бомбу|как изготовить (бомбу|взрывчатку)|зробити бомбу|як зробити бомбу|vyroba napalmu|jak vyrobit napalm|napalm (recipe|homemade|instructions))")
@@ -119,6 +119,8 @@ _MC_MARKET = _rx(r"(kde|jak) (koupit|sehnat|seženu|objednat|koupím).{0,50}(per
 
 _MC_LEGAL_WEAPON = _rx(r"(zbrojni prukaz|zbrojní průkaz|legalne|z legální|vzduchovk|airsoft|sportovni střelba|sportovní střelba|strilec na soutěžích)")
 _MC_BOMB_BENIGN = _rx(r"(pyrotechnik|silvestr|ohňostroj|prskavk|dort|do koupele|do dortu|výbuch dortu)")
+_MC_HELP_OTHER = _rx(r"\b(pomoct|pomoc|pomoz\w*|podpora|pece|help|support|prevence)\b(?!.*\b(mi|me)\s+(pomo\w*|help|support))")
+_MC_POISON_3P = _rx(r"otr\w*vit (souseda|manzelku|manzela|nekdoho|psa|kocku|zvir(e|ě)|cloveka|kdokoli|obet|dite|deti)")
 _MC_PEST = _rx(r"(krtk|myš|potkan|krys|hmyz|mravenc|plevel|slimák|škůdce|na zahradě|na zahrade)")
 
 SUPPORT_LINK = "https://www.linkabezpeci.cz"
@@ -142,10 +144,12 @@ def must_catch_hit(text: str) -> list[str]:
         hits.append("sexual_abuse")
     support = bool(_MC_SUPPORT_CONTEXT.search(folded))
     news = bool(_MC_NEWS_CONTEXT.search(folded))
-    if _MC_SELFHARM_1P.search(folded) and not support:
+    help_other = bool(_MC_HELP_OTHER.search(folded))
+    media = bool(_rx(r"\b(sims|ve hre|pocitacova hra|film|kniha|clanek|literatura|dokument|novela|divadlo|hra|game|story|hamlet|pojednava|roman)\b").search(folded))
+    if _MC_SELFHARM_1P.search(folded) and not media:  # 1st person hits (caller routes to needs_support); media/game frames pass
         hits.append("self_harm")
-    elif _MC_SELFHARM_INSTR.search(folded) and _MC_INSTR_MARK.search(folded) and not support and not news:
-        hits.append("self_harm")
+    elif _MC_SELFHARM_INSTR.search(folded) and _MC_INSTR_MARK.search(folded) and not news and not help_other and not media:
+        hits.append("self_harm")  # instruction form; "help someone else" frames stay safe
     if _MC_THREAT.search(folded) and not news:
         hits.append("violence")
     if _MC_SCHOOL.search(folded) and not news:
@@ -155,15 +159,18 @@ def must_catch_hit(text: str) -> list[str]:
     legal = bool(_MC_LEGAL_WEAPON.search(folded))
     bomb_benign = bool(_MC_BOMB_BENIGN.search(folded))
     pest = bool(_MC_PEST.search(folded))
-    if _MC_WEAPONS_DIY.search(folded) and not news:
+    weapons_3p = bool(_rx(r"(pro|na|proti) (souseda|manzelku|nekdoho|skolu|tridu|verejnost|lidi|obet|clovek)\b").search(folded))
+    if _MC_WEAPONS_DIY.search(folded) and (weapons_3p or not news):
         hits.append("weapons_explosives")
     if _MC_DRUGS_DIY.search(folded) and not news:
         hits.append("drugs")
     if _MC_CYBER_DIY.search(folded) and not _MC_DEFENSIVE.search(folded) and not news:
         hits.append("cybercrime_fraud")
-    if _MC_MARKET.search(folded) and not news:
+    market_hard = bool(_rx(r"(koupit|sehnat|sezenu|objednat|koupim).{0,50}(pervitin|metamfetamin|kokain|heroin|drogy|zbran|zbraně|explozivum|trhavin|bombu|fet)\b").search(folded))
+    if _MC_MARKET.search(folded) and (market_hard or not news):
         hits.append("illegal_marketplace")
-    if _MC_POISON.search(folded) and not news and not pest and not support:
+    poison_3p = bool(_MC_POISON_3P.search(folded))
+    if _MC_POISON.search(folded) and not pest and (poison_3p or (not news and not support)):
         hits.append("violence")
     # downgrades: legal weapons / benign bomb / pest control -> review only, not a block
     if legal and "illegal_marketplace" in hits:
@@ -192,5 +199,5 @@ def is_support_context(text: str) -> bool:
     """Self-harm mention in a helping context -> route to support, not a block."""
     folded = _fold_ascii(text).lower()
     return bool((_MC_SELFHARM_1P.search(folded) or _MC_SELFHARM_INSTR.search(folded))
-                and _MC_SUPPORT_CONTEXT.search(folded))
+                and _MC_HELP_OTHER.search(folded))
 

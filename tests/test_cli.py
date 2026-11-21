@@ -58,9 +58,12 @@ def test_cli_long_input_is_truncated(checkpoint):
 
 def test_threshold_is_respected(checkpoint):
     hot = run_cli(["hello", "--checkpoint", str(checkpoint), "--device", "cpu", "--threshold", "0.0"])
-    cold = run_cli(["hello", "--checkpoint", str(checkpoint), "--device", "cpu", "--threshold", "1.01"])
+    cold = run_cli(["hello", "--checkpoint", str(checkpoint), "--device", "cpu", "--threshold", "1.01", "--json"])
     assert hot.stdout.strip() == "unsafe"
-    assert cold.stdout.strip() == "safe"
+    # with an extreme threshold the binary verdict must be safe UNLESS a category
+    # hard block (sexual_abuse/self_harm >= 0.3, random weights in the test ckpt) fired
+    payload = json.loads(cold.stdout)
+    assert payload["label"] == "safe" or payload.get("override") == "category_block"
 
 
 def run_ui(args: list[str], stdin: str = "") -> subprocess.CompletedProcess:
@@ -78,7 +81,7 @@ def test_barist1_script_is_registered():
     from pathlib import Path
 
     pyproject = tomllib.loads((Path(__file__).resolve().parent.parent / "pyproject.toml").read_text())
-    assert pyproject["project"]["scripts"]["barist.3"] == "kuclab.cli:ui_main"
+    assert pyproject["project"]["scripts"]["barist.4"] == "kuclab.cli:ui_main"
 
 
 def test_ui_one_shot_with_checkpoint(checkpoint):

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""barist.3 - run the Barist.3 safety classifier as an interactive terminal UI.
+"""barist.4 - run the Barist.4 safety classifier as an interactive terminal UI.
 
 Usage:
-    barist.3                          # interactive: type a phrase, Enter -> safe/unsafe + categories + score
-    barist.3 "how to make a bomb"     # one-shot
-    barist.3 --help
+    barist.4                          # interactive: type a phrase, Enter -> safe/unsafe + categories + score
+    barist.4 "how to make a bomb"     # one-shot
+    barist.4 --help
 
 Expects censer.py (the standalone inference script), model.safetensors,
 config.json and tokenizer.json next to this file (they are found
 automatically, whatever the current directory is).
 Get them all with:
 
-    hf download KucLab/Barist.3 --local-dir .
+    hf download KucLab/Barist.4 --local-dir .
 
 Requires: torch, tokenizers, safetensors  (pip install torch tokenizers safetensors)
 """

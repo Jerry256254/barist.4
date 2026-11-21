@@ -37,6 +37,10 @@ class Verdict:
             d["categories"] = self.categories
         if getattr(self, "needs_review", False):
             d["needs_review"] = True
+        if getattr(self, "override", None):
+            d["override"] = self.override
+        if getattr(self, "needs_support", None):
+            d["needs_support"] = self.needs_support
         if self.chunks > 1:
             d["chunks"] = self.chunks
         return d
@@ -76,14 +80,12 @@ class SafetyModel:
         help_ctx = is_support_context(text)
         support = help_ctx or "self_harm" in hit
         cat_scores = dict(zip(cats, row[2:])) if cats else {}
-        if not support and cats and "self_harm" in cats:
-            sh = cat_scores["self_harm"]
-            if sh >= 0.3:  # model-level self-harm signal -> support resources even without regex
-                support = True
-        # Item-1 hard block: high sexual_abuse / self_harm category score blocks regardless
-        # of the language threshold (cs/sk/default); 0.3 is a BLOCK decision only, not a label threshold.
+        if cats and "self_harm" in cats and cat_scores["self_harm"] >= 0.2:
+            support = True  # Barist.4: self_harm >= 0.2 -> support resources in ANY language
+        # Hard block: sexual_abuse / self_harm >= 0.3 blocks regardless of language threshold
+        # (0.3 is a BLOCK decision only, not a label threshold).
         cat_block: list[str] = []
-        if cats and not support and lang in ("cs", "sk", "default"):
+        if cats and not help_ctx:  # help-other frames are never hard-blocked
             cat_block = [c for c in ("sexual_abuse", "self_harm") if cat_scores.get(c, 0.0) >= 0.3]
             if cat_block:
                 is_unsafe = True

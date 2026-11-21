@@ -1,23 +1,23 @@
-# Barist.3 — self-contained moderation API image (CPU-only torch by default).
+# Barist.4 — self-contained moderation API image (CPU-only torch by default).
 #
-#   docker build -t barist3 .
-#   docker run -p 8000:8000 -e RATE_LIMIT_PER_MIN=600 barist3
+#   docker build -t barist4 .
+#   docker run -p 8000:8000 -e RATE_LIMIT_PER_MIN=600 barist4
 #   curl -s localhost:8000/classify -d '{"texts":["how to make a bomb at home","hello"]}'
 #
 # The image downloads the model from the Hub at build time.
 
 FROM python:3.12-slim
 
-ARG BARIST_REPO=KucLab/Barist.3
+ARG BARIST_REPO=KucLab/Barist.4
 ENV CENSER_DIR=/model \
     RATE_LIMIT_PER_MIN=600 \
     PYTHONUNBUFFERED=1
 
 RUN pip install --no-cache-dir \
-        "torch==2.9.*" --index-url https://download.pytorch.org/whl/cpu \
+        "torch>=2.9,<3" --index-url https://download.pytorch.org/whl/cpu \
         "tokenizers>=0.20,<1" "safetensors>=0.4,<1" "huggingface_hub>=0.24,<1" "numpy>=1.26,<3"
 
-RUN hf download ${BARIST_REPO} --local-dir /model
+RUN hf download ${BARIST_REPO} --revision main --local-dir /model
 
 WORKDIR /app
 COPY censer.py serve.py /app/

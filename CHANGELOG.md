@@ -3,8 +3,32 @@
 No silent overwrites of the same version: a new checkpoint ships as a new version
 (Barist.1.1, ...) or a git tag.
 
+## Barist.4 — seventh adversarial review (released; own repos: `Jerry256254/barist.4` + `KucLab/Barist.4`, git tag `barist-4`)
+Checkpoint `checkpoints_b4b/best.pt`.
+
+- Context-bypass fixed: context patterns (support/news) now use word boundaries
+  (`hra` no longer matches `ochrana`/`hrach`); poison/weapons/market aimed at a
+  2nd/3rd person or hard items ignore news/support context entirely; self-harm 1st
+  person hits even with glued "kamarád/pomůže" context (only help-OTHER frames and
+  media/game frames pass); regex gate extended with glued-context must-hit
+  sentences (both directions), 454 benign rows, 0 FP, runs in pytest.
+- Category hard block now applies in ANY language: sexual_abuse/self_harm >= 0.3
+  forces unsafe; self_harm >= 0.2 routes to needs_support (Linka bezpečí).
+- Data round 2 generated with a local ollama model (short moderation-style
+  request lines only, no operational content): generic self-harm/threats without
+  keywords, leet/typo adversarial variants, identity contrast pairs (+identity to
+  ~2k rows, weight 25), realistic Czech benign, uk/ru. Train purged again of
+  >0.8 5-gram overlaps with heldout2+heldout3 (dedup gate 0.75 PASS).
+- heldout3 report now contains aggregate counts only (individual misses are never
+  written, so the set stays clean).
+- Minor: CHANGELOG counts fixed (50+14), checkpoint name, serve.py banner,
+  Dockerfile torch range + `hf download --revision main`, tests/test_regex_gate.py
+  published to the Hub repo.
+- Renamed to Barist.4 everywhere: `barist.4` CLI, `kuclab-barist4`,
+  `ARG BARIST_REPO=KucLab/Barist.4`, Hub bundle name `Barist.4`.
+
 ## Barist.3 — sixth adversarial review (released; own repos: `Jerry256254/barist.3` + `KucLab/Barist.3`, git tag `barist-3`)
-Checkpoint `checkpoints_b3a/best.pt`.
+Checkpoint `checkpoints_b3e/best.pt`.
 
 - Regex de-contaminated: no literal heldout2 phrases; patterns rewritten from dev only
   and tightened (1st-person requirement for self-harm/poison, intimate-context
@@ -15,7 +39,7 @@ Checkpoint `checkpoints_b3a/best.pt`.
 - Identity-bias fix: +1,058 identity-neutral training sentences (>=500 per group:
   Romové, Židé, muslimové, uprchlíci, černoši; cs+en), source `identity_neutral`
   (hard-negative weight); new release gate `identity_fp <= 2%` (eval_gates.py).
-- New clean held-out set `data/mustcatch_heldout3.jsonl` (fresh phrasings, 53 unsafe +
+- New clean held-out set `data/mustcatch_heldout3.jsonl` (fresh phrasings, 50 unsafe +
   14 benign); reports contain aggregate counts only (no individual misses).
 - heldout2 miss categories fixed via paraphrased training data (+ benign twins),
   never by copying test sentences into the regex.

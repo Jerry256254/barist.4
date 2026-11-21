@@ -67,8 +67,11 @@ def main() -> None:
                       "detected@0.5_with_prefilter": h_det_pf,
                       "benign_n": sum(1 for l in h_labels if l == 0), "false_positives@0.5": h_fp,
                       "fp@0.5_with_prefilter": h_fp_pf,
-                      "misses": [(t, round(p, 3)) for t, l, p in zip(h_texts, h_labels, h_probs) if l == 1 and p < 0.5],
-                      "fps": [(t, round(p, 3)) for t, l, p in zip(h_texts, h_labels, h_probs) if l == 0 and p >= 0.5]}
+                      # heldout3 reports AGGREGATE COUNTS ONLY (individual misses are never
+                      # written, so the set stays clean for future reviews)
+                      **({} if name != "heldout3" else {}),
+                      "misses": ([] if name == "heldout3" else [(t, round(p, 3)) for t, l, p in zip(h_texts, h_labels, h_probs) if l == 1 and p < 0.5]),
+                      "fps": ([] if name == "heldout3" else [(t, round(p, 3)) for t, l, p in zip(h_texts, h_labels, h_probs) if l == 0 and p >= 0.5])}
         print(f"[{name}] model-only detection @0.5: {h_det}/{sum(h_labels)}; with pre-filter: {h_det_pf}/{sum(h_labels)}; benign FP: {h_fp} (pf {h_fp_pf})/{sum(1 for l in h_labels if l==0)}")
         Path(rep).write_text(json.dumps(held[name], indent=2, ensure_ascii=False))
     print(f"must-catch detection @0.5: {det}/{len(mc_probs)} ({det/len(mc_probs):.1%})")

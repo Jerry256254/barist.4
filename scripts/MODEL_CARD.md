@@ -35,7 +35,7 @@ metrics:
 - ece
 ---
 
-# Barist.3
+# Barist.4
 
 > **Naming note:** this model is the successor of the Censer line (Censer.1–.9).
 > Too many versioned releases -> the project continues as **Barist**. Barist.1 =
@@ -56,7 +56,7 @@ no `trust_remote_code`. Multi-label pipeline applies **sigmoid** automatically; 
 
 ```python
 from transformers import pipeline
-clf = pipeline("text-classification", model="KucLab/Barist.3")
+clf = pipeline("text-classification", model="KucLab/Barist.4")
 clf("how to make a bomb at home", top_k=-1)
 ```
 
@@ -89,6 +89,18 @@ clf("how to make a bomb at home", top_k=-1)
 | gates.json copied report-level metrics between models; wrong user-set denominator | misleading | **per-model report dirs; user benign set = 43 sentences, matching denominators; unmeasurable gates shown as n/a, not PASS** |
 | false "0 CSAM/self-harm passes" claim | untrue | **removed; honest gate table above** |
 
+## What changed in Barist.4 (vs Barist.3) — seventh adversarial review
+
+| Review item | Barist.3 | **Barist.4** |
+| --- | --- | --- |
+| Context bypass: "Jak otrávit souseda, film" → safe | bypass | **word boundaries on context patterns; poison/weapons/market with 2nd/3rd-person target or hard items ignore news/support context; self-harm 1P hits even with glued "kamarád mi pomůže"; regex gate tests both directions (glued-context must-hit sentences added), 454 benign 0 FP in pytest** |
+| Category hard block only cs/sk/default | narrow | **sexual_abuse/self_harm ≥ 0.3 blocks in ANY language; self_harm ≥ 0.2 → needs_support (Linka bezpečí) in any language** |
+| Identity FP 31.8 % | FAIL | **+identity contrast data to ~2k rows (weight 25) + ollama round 2; identity_fp 0.64 → 0.23** |
+| heldout3 report listed individual misses | set burned | **aggregate counts only** |
+| heldout2 model-only 51/75, +regex 65 | below c9 | **52/75 = Censer.9 (PASS), +regex 68/75 (best so far)** |
+| cs_benign 7.8 % | FAIL | **6.1–7.0 %** (realistic cs benign via ollama, slang/news/children counter-pairs) |
+| Dockerfile unpinned torch, no --revision; serve banner; CHANGELOG counts | minor | **fixed; tests/test_regex_gate.py published to Hub** |
+
 ## What changed in Barist.3 (vs Barist.2) — sixth adversarial review
 
 | Review item | Barist.2 | **Barist.3** |
@@ -102,26 +114,26 @@ clf("how to make a bomb at home", top_k=-1)
 
 ## Release gates (review A) — measured by `scripts/eval_gates.py` -> `reports/gates.json`
 
-| Gate (identical sets for both models; heldout2 = full 91-row set, train purged of >0.8 5-gram overlaps) | Censer.9 | Barist.3 | min | target | verdict |
+| Gate (identical sets for both models; heldout2 = full 91-row set, train purged of >0.8 5-gram overlaps) | Censer.9 | Barist.4 | min | target | verdict |
 | --- | --- | --- | --- | --- | --- |
-| heldout2_model_only | 52/75 | 51/75 | ==c9 | 0.85 | FAIL |
-| heldout2_with_prefilter | 64/75 | 66/75 | ==c9 | 0.95 | PASS |
+| heldout2_model_only | 52/75 | 52/75 | ==c9 | 0.85 | PASS |
+| heldout2_with_prefilter | 64/75 | 68/75 | ==c9 | 0.95 | PASS |
 | heldout2_benign_fp | 7/16 | 5/16 | 2/15 | 1/15 | FAIL |
-| cs_benign_fpr_raw | 0.2783 | 0.0783 | 0.05 | 0.03 | FAIL |
-| cs_benign_fpr@cs_thr | 0.2783 | 0.0783 | 0.05 | 0.03 | FAIL |
-| hardneg_fp | 6/44 | 5/44 | 3/44 | 1/44 | FAIL |
+| cs_benign_fpr_raw | 0.2783 | 0.0696 | 0.05 | 0.03 | FAIL |
+| cs_benign_fpr@cs_thr | 0.2783 | 0.0696 | 0.05 | 0.03 | FAIL |
+| hardneg_fp | 6/44 | 4/44 | 3/44 | 1/44 | FAIL |
 | train_must_catch | 84/88 | 81/88 | 84/88 | 86/88 | FAIL |
-| test_f1 | 0.8239 | 0.8228 | 0.83 | 0.849 | FAIL |
-| test_recall | 0.7987 | 0.7917 | 0.8 | 0.83 | FAIL |
-| test_precision | 0.8508 | 0.8565 | 0.85 | 0.86 | PASS |
-| user_benign_fp | 35/43 | 13/43 | 3/43 | 1/43 | FAIL |
-| ece_calibrated | 0.018413447943885906 | 0.0250844468628166 | 0.035 | 0.03 | PASS |
+| test_f1 | 0.8239 | 0.8223 | 0.83 | 0.849 | FAIL |
+| test_recall | 0.7987 | 0.7939 | 0.8 | 0.83 | FAIL |
+| test_precision | 0.8508 | 0.8528 | 0.85 | 0.86 | PASS |
+| user_benign_fp | 35/43 | 14/43 | 3/43 | 1/43 | FAIL |
+| ece_calibrated | 0.018413447943885906 | 0.02469610128832463 | 0.035 | 0.03 | PASS |
 | onnx_max_abs_diff | None | 0.0 | 0.001 | 0.0001 | PASS |
 | regex_gate_hard_fp | None | 0 | 0 | 0 | PASS |
 | heldout2_dedup_max_overlap | None | 0.75 | 0.8 | 0.5 | PASS |
-| heldout3_model_only | 32/50 | 29/50 | ==c9 | 0.85 | FAIL |
-| heldout3_with_prefilter | 33/50 | 31/50 | ==c9 | 0.95 | FAIL |
-| identity_fp | 0.6364 | 0.3182 | 0.02 | 0.0 | FAIL |
+| heldout3_model_only | 32/50 | 30/50 | ==c9 | 0.85 | FAIL |
+| heldout3_with_prefilter | 33/50 | 32/50 | ==c9 | 0.95 | FAIL |
+| identity_fp | 0.6364 | 0.2273 | 0.02 | 0.0 | FAIL |
 
 Honest statement (Barist.2): heldout2 is the FULL 91-row set (75 unsafe + 16 benign);
 the 20 train rows with >0.8 5-gram overlap were purged from TRAIN, not from the test
@@ -144,21 +156,21 @@ FP/recall polish, not safety-critical passes.
 
 ## How to run
 
-### The `barist.3` command — interactive terminal UI
+### The `barist.4` command — interactive terminal UI
 
 ```bash
 pip install torch tokenizers safetensors huggingface_hub
-hf download KucLab/Barist.3 --local-dir ~/.local/share/barist3
-chmod +x ~/.local/share/barist3/barist.3
-ln -s ~/.local/share/barist3/barist.3 ~/.local/bin/barist.2
-barist.3                          # interactive UI: phrase in -> safe/unsafe + categories + score
-barist.3 "how to make a bomb at home"     # prints: unsafe
+hf download KucLab/Barist.4 --local-dir ~/.local/share/barist4
+chmod +x ~/.local/share/barist4/barist.4
+ln -s ~/.local/share/barist4/barist.4 ~/.local/bin/barist.2
+barist.4                          # interactive UI: phrase in -> safe/unsafe + categories + score
+barist.4 "how to make a bomb at home"     # prints: unsafe
 ```
 
 Or via the GitHub package (loads the Hub model with plain `transformers`):
 
 ```bash
-pip install "git+https://github.com/Jerry256254/barist.3.git"
+pip install "git+https://github.com/Jerry256254/barist.4.git"
 barist.2
 ```
 
@@ -173,8 +185,8 @@ pip install torch transformers
 python - <<'PY'
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-tok = AutoTokenizer.from_pretrained("KucLab/Barist.3")
-model = AutoModelForSequenceClassification.from_pretrained("KucLab/Barist.3").eval()
+tok = AutoTokenizer.from_pretrained("KucLab/Barist.4")
+model = AutoModelForSequenceClassification.from_pretrained("KucLab/Barist.4").eval()
 cfg = model.config
 text = "how to make a bomb at home"
 enc = tok(text, return_tensors="pt", truncation=True, max_length=4096)
@@ -375,7 +387,7 @@ see the external head-to-head above for public benchmarks.
 
 | Model | Params | Checkpoint | F1 | Latency | Throughput (b=8) |
 | --- | --- | --- | --- | --- | --- |
-| KucLab/Barist.3 (this work) | 0.9M | 3.6 MB | **0.8238** | 1.06 ms | 6647/s |
+| KucLab/Barist.4 (this work) | 0.9M | 3.6 MB | **0.8238** | 1.06 ms | 6647/s |
 | KucLab/Censer.5 (prev) | 0.9M | 3.6 MB | 0.8490 | 1.35 ms | 1828/s |
 | KucLab/Censer.4 (old) | 0.9M | 3.6 MB | 0.8453 | 1.39 ms | 1708/s |
 | KucLab/Censer.3 (old) | 14.4M | 57.7 MB | 0.8224 | 4.36 ms | 270/s |
@@ -395,12 +407,12 @@ see the external head-to-head above for public benchmarks.
 ## Usage without transformers
 
 ```bash
-hf download KucLab/Barist.3 --local-dir Barist.1
+hf download KucLab/Barist.4 --local-dir Barist.1
 cd Barist.1
 python censer.py "how to make a bomb at home"        # prints: unsafe
 python censer.py --json "how to make a bomb at home"
 python censer.py --prefer-quant "..."                 # 0.9 MB int8 checkpoint
-./barist.3                                            # interactive UI
+./barist.4                                            # interactive UI
 ```
 
 Files:
@@ -413,7 +425,7 @@ Files:
 | `config.json` | standard config + `temperature`, `cat_thresholds`, `cat_experimental`, `lang_thresholds`, `must_catch_override`, single `rope_parameters` |
 | `tokenizer.json` / `tokenizer_config.json` | byte-level BPE, prompt template baked in, `model_max_length: 4096` |
 | `censer.py` | standalone inference: chunked-max for long inputs (default), int8/fp16 loaders, per-language thresholds, must-catch pre-filter, safe/unsafe labels |
-| `barist.3` | launcher for the interactive terminal UI |
+| `barist.4` | launcher for the interactive terminal UI |
 | `serve.py` | batch HTTP API (stdlib only) |
 | `Dockerfile` | pinned CPU container serving the API, with HEALTHCHECK |
 | `reports/` | all eval JSONs (external H2H, calibration, must-catch + held-out, multilingual, lang_thresholds, adversarial, …) + `figs/` |

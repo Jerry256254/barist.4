@@ -52,7 +52,7 @@ def main():
     try:
         import onnxruntime as ort
         import numpy as np
-        onnx_name = args.onnx or ("barist3.onnx" if (b / "barist3.onnx").exists() else ("barist2.onnx" if (b / "barist2.onnx").exists() else "barist1.onnx"))
+        onnx_name = args.onnx or ("barist4.onnx" if (b / "barist4.onnx").exists() else ("barist3.onnx" if (b / "barist3.onnx").exists() else ("barist2.onnx" if (b / "barist2.onnx").exists() else "barist1.onnx")))
         sess = ort.InferenceSession(str(b / onnx_name), providers=["CPUExecutionProvider"])
         tok = C.Tokenizer.from_file(str(b / "tokenizer.json"))
         bos, user, asst = tok.token_to_id("[BOS]"), tok.token_to_id("[USER]"), tok.token_to_id("[ASSISTANT]")
